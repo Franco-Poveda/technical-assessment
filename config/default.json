@@ -1,0 +1,9 @@
+{
+    "mongodb": {
+        "uri": "mongodb://localhost:27017/workast-api"
+    },
+      "server": {
+          "port": 3000,
+          "ip": "0.0.0.0"
+      }
+}
