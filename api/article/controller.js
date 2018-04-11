@@ -1,44 +1,68 @@
 const mongoose = require('mongoose');
+const success = require('../../libs/response').success;
+const notFound = require('../../libs/response').notFound;
 
 require('./model');
 const Article = mongoose.model('article');
 
 module.exports = {
-    get,
-    show
+    create,
+    show,
+    update,
+    destroy
   };
 
-function get ( req, res) {
-    console.log("get controller");
-    Article.find()
-    .then((art) => {
-        console.log(art);
-        })
-    .then(res.status(200).json({}))
-    .catch(res.end())
-}
+  function create (req, res, next) {
+  Article.create(req.bodymen.body)
+    .then((article) => article.view(true))
+    .then(success(res, 201))
+    .catch(next)
+  }
 
 function show ({ params }, res, next) {
-    console.log("show controller");
-
-  Article.findById("5acd87bc74083a411a637ed7")
+  Article.find({})
     .then(notFound(res))
-    .then((article) => article ? article.view() : null)
+    .then((articles) => articles.map((article) => article.view(true)))
     .then(success(res))
     .catch(next)
 }
 
-const success = (res, status) => (entity) => {
-    if (entity) {
-      res.status(status || 200).json(entity)
-    }
-    return null
-  }
-  
-const notFound = (res) => (entity) => {
-    if (entity) {
-      return entity
-    }
-    res.status(404).end()
-    return null
-  }
+function update ({ bodymen: { body }, params }, res, next) {
+  Article.findById(params.id)
+    .then(notFound(res))
+    .then((article) => article ? Object.assign(article, body).save() : null)
+    .then((article) => article ? article.view(true) : null)
+    .then(success(res))
+    .catch((err) => {
+        /* istanbul ignore else */
+        if (err.name == 'CastError') {
+          res.status(400).json({
+            valid: false,
+            param: err.path,
+            message: 'invalid id format'
+          })
+        } else {
+          next(err)
+        }
+      })
+}
+function destroy ({ params }, res, next) {
+  Article.findById(params.id)
+    .then(notFound(res))
+    .then((article) => article ? article.remove() : null)
+    .then(success(res, 204))
+    .catch((err) => {
+        /* istanbul ignore else */
+        if (err.name == 'CastError') {
+          res.status(400).json({
+            valid: false,
+            param: err.path,
+            message: 'invalid id format'
+          })
+        } else {
+          next(err)
+        }
+      })
+}
+
+

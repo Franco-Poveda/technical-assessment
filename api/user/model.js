@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
 schema.methods = {
     view (full) {
       let view = {}
-      let fields = ['name', 'avatar']
+      let fields = ['_id', 'name', 'avatar']
 
   
       fields.forEach((field) => { view[field] = this[field] })

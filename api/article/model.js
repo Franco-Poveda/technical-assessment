@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 
 const schema = new mongoose.Schema({
-  userId : mongoose.Schema.Types.ObjectId,
+  userId : {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
   title : String,
   text  : String,
   tags: [{ type: String}]
@@ -13,7 +13,9 @@ schema.methods = {
     view (full) {
       let view = {}
       let fields = ['title', 'text', 'tags']
-
+      if (full) {
+        fields = [...fields, '_id', 'userId']
+      }
   
       fields.forEach((field) => { view[field] = this[field] })
   

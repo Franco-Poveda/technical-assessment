@@ -1,25 +1,34 @@
 const mongoose = require('mongoose');
+const success = require('../../libs/response').success;
+const badRequest = require('../../libs/response').badRequest;
 
 require('./model');
 const User = mongoose.model('user');
 
 module.exports = {
-    get,
+    create,
     show
   };
 
-function get ( req, res) {
-    console.log("get controller");
-    User.find()
-    .then((art) => {
-        console.log(art);
+  function create ({ bodymen: { body } }, res, next) {
+  User.create(body)
+    .then((user) => user.view(true))
+    .then(success(res, 201))
+    .catch((err) => {
+      /* istanbul ignore else */
+      if (err.errors.avatar) {
+        res.status(400).json({
+          valid: false,
+          param: err.errors.avatar.path,
+          message: err.errors.avatar.message
         })
-    .then(res.status(200).json({}))
-    .catch(res.end())
-}
+      } else {
+        next(err)
+      }
+    })
+  }
 
 function show ({ params }, res, next) {
-    console.log("show user");
 
   User.findById("5acdac6074083a411a638c6a")
     .then(notFound(res))
@@ -27,18 +36,3 @@ function show ({ params }, res, next) {
     .then(success(res))
     .catch(next)
 }
-
-const success = (res, status) => (entity) => {
-    if (entity) {
-      res.status(status || 200).json(entity)
-    }
-    return null
-  }
-  
-const notFound = (res) => (entity) => {
-    if (entity) {
-      return entity
-    }
-    res.status(404).end()
-    return null
-  }
