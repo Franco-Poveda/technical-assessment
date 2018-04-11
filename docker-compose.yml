@@ -12,6 +12,8 @@ services:
       - ./logs:/app/logs
     networks:
       - db
+    depends_on:
+      - mongo
     restart: always
 
   mongo:

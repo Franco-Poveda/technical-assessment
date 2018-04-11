@@ -8,4 +8,4 @@ ENV NODE_PATH=/app/node_modules
 
 COPY . /app/
 
-CMD node /app/index.js
+CMD NODE_ENV=dockerized node /app/index.js

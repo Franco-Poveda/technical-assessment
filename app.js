@@ -4,11 +4,10 @@ const config = require('config');
 const  http = require('http');
 
 const morgan = require('morgan');
-
 const express = require('express');
-const app = express();
 const router = require('./api/router');
 
+const app = express();
 app.use(morgan('short'));
 app.use(router);
 const server = http.createServer(app)
