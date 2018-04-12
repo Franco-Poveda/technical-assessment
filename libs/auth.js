@@ -1,5 +1,7 @@
-var passport = require('passport');
-var Strategy = require('passport-http-bearer').Strategy;
+'use strinct';
+
+const passport = require('passport');
+const Strategy = require('passport-http-bearer').Strategy;
 
 const TOKEN_KEY = process.env.TOKEN_KEY || '1111';
 

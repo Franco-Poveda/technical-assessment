@@ -8,7 +8,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bodyErrorHandler = require('bodymen').errorHandler;
 
-const router = require('./api/router');
+const router = require('./router');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,4 +31,4 @@ app.use(router);
         }));
   
 
-exports = module.exports = app;
+module.exports = app;

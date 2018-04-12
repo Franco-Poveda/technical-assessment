@@ -4,7 +4,7 @@
   "description": "RESTful API implementation to manage users and articles domain models. Part of Workast technical assessment",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "mocha",
     "docs": "apidoc -i api -o docs && apidoc-markdown -p docs -o DOCS.md"
   },
   "repository": {
@@ -23,6 +23,7 @@
     "config": "^1.30.0",
     "express": "^4.16.3",
     "mongoose": "^5.0.14",
+    "mongoose-id-validator": "^0.4.3",
     "mongoose-type-url": "^1.0.2",
     "morgan": "^1.9.0",
     "passport": "^0.4.0",
@@ -31,11 +32,8 @@
   "devDependencies": {
     "apidoc": "^0.17.6",
     "apidoc-markdown": "^0.2.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^4.19.1",
-    "jest": "^22.4.3",
-    "superagent": "^3.8.2",
-    "supertest": "^3.0.0"
+    "chai": "^4.1.2",
+    "mocha": "^5.0.5",
+    "mockgoose": "^7.3.5"
   }
 }

@@ -28,5 +28,9 @@ docker-compose up
 
  (you need docker alredy installed on your machine, refer to docker instalation guide ):
 
+ ## Running Tests
+ 
+     $ npm test
+
 
 

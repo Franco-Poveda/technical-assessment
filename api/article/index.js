@@ -1,61 +1,64 @@
-const Router = require('express').Router;
-const router = new Router();
-const body = require('bodymen').middleware;
+'use strict'
 
-const controller = require('./controller');
-const verifyToken = require('../../libs/auth');
+const Router = require('express').Router
+const body = require('bodymen').middleware
 
-router.get('/', verifyToken(), controller.show);
-router.post('/', verifyToken(),
-    body({
-        title: {
-            type: String,
-            required: true,
-            minlength: 3
-        },
-        text: {
-            type: String,
-            required: true,
-            minlength: 5
-        },
-        tags: [String],
-        userId: {
-            type: String,
-            required: true,
-            minlength: 24
-        }
-    }), controller.create);
+const controller = require('./controller')
+const Article = require('./model')
 
-router.put('/:id',
-    verifyToken(),
-    body({
-        title: {
-            type: String,
-            required: true,
-            minlength: 3
-        },
-        text: {
-            type: String,
-            required: true,
-            minlength: 5
-        },
-        tags: [String],
-        userId: String
-    }),
-    controller.update);
+const { title, text, tags, userId } = Article.schema.tree
+const router = new Router()
+
+/**
+ * @api {get} /articles Retrieve articles
+ * @apiName RetrieveArticles
+ * @apiGroup Article
+ * @apiPermission master
+ * @apiParam {String[]} [tags] array tags filter.
+ * @apiSuccess {Object[]} 200 articles List of articles.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 401 master token access only.
+ */
+router.get('/', controller.show)
+
+/**
+ * @api {post} /articles Create article
+ * @apiName CreateArticle
+ * @apiGroup Article
+ * @apiPermission master
+ * @apiParam title Article's title.
+ * @apiParam text Article's text.
+ * @apiParam {String[]} tags Article's tags array.
+ * @apiSuccess {Object} article Article's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 401 master access only.
+ */
+router.post('/', body({ title, text, tags, userId }), controller.create)
+
+/**
+ * @api {put} /articles/:id Update article
+ * @apiName UpdateArticle
+ * @apiGroup Article
+ * @apiPermission master
+ * @apiParam title Article's title.
+ * @apiParam text Article's text.
+ * @apiParam tags Article's tags.
+ * @apiSuccess {Object} article Article's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 404 Article not found.
+ * @apiError 401 master token access only.
+ */
+router.put('/:id', body({ title, text, tags, userId }), controller.update)
 
 /**
  * @api {delete} /articles/:id Delete article
  * @apiName DeleteArticle
  * @apiGroup Article
  * @apiPermission master
- * @apiParam {String} access_token master access token.
  * @apiSuccess (Success 204) 204 No Content.
  * @apiError 404 Article not found.
- * @apiError 401 master access only.
+ * @apiError 401 master token access only.
  */
-router.delete('/:id',
-    verifyToken(),
-    controller.destroy);
+router.delete('/:id', controller.destroy)
 
-exports = module.exports = router;
+exports = module.exports = router

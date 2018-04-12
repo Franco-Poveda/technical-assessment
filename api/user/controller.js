@@ -1,16 +1,15 @@
-const mongoose = require('mongoose');
-const success = require('../../libs/response').success;
-const badRequest = require('../../libs/response').badRequest;
+'use strict';
 
-require('./model');
-const User = mongoose.model('user');
+const mongoose = require('mongoose')
+const { success, notFound, badRequest } = require('../../libs/response');
+const User = require('./model')
 
 module.exports = {
-    create,
-    show
-  };
+  create,
+  show
+}
 
-  function create ({ bodymen: { body } }, res, next) {
+function create ({ bodymen: { body } }, res, next) {
   User.create(body)
     .then((user) => user.view(true))
     .then(success(res, 201))
@@ -26,11 +25,10 @@ module.exports = {
         next(err)
       }
     })
-  }
+}
 
 function show ({ params }, res, next) {
-
-  User.findById("5acdac6074083a411a638c6a")
+  User.findById(params.id)
     .then(notFound(res))
     .then((user) => user ? user.view() : null)
     .then(success(res))

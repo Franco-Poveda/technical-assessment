@@ -1,21 +1,27 @@
-var mongoose = require('mongoose');
-require('mongoose-type-url');
+'use strict'
+
+var mongoose = require('mongoose')
+require('mongoose-type-url')
 
 const schema = new mongoose.Schema({
-  name : String,
-  avatar: mongoose.SchemaTypes.Url,
-});
+  name: {
+    type: String,
+    required: true,
+    minlength: 4
+  },
+  avatar: {
+    type: mongoose.SchemaTypes.Url,
+    required: true
+  }
+})
 
 schema.methods = {
-    view (full) {
-      let view = {}
-      let fields = ['_id', 'name', 'avatar']
-
-  
-      fields.forEach((field) => { view[field] = this[field] })
-  
-      return view
-    }
+  view () {
+    let view = {}
+    let fields = ['_id', 'name', 'avatar']
+    fields.forEach((field) => { view[field] = this[field] })
+    return view
   }
+}
 
-  module.exports = mongoose.model('user', schema, 'user')
+module.exports = mongoose.model('user', schema, 'user')
