@@ -16,7 +16,7 @@ const schema = new mongoose.Schema({
 })
 
 schema.methods = {
-  view () {
+  view() {
     let view = {}
     let fields = ['_id', 'name', 'avatar']
     fields.forEach((field) => { view[field] = this[field] })

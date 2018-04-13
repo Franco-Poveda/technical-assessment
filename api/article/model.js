@@ -10,13 +10,13 @@ const schema = new mongoose.Schema({
     ref: 'user',
     required: true
   },
-  title: {type: String, required: true},
-  text: {type: String, required: true},
-  tags: [{type: String}]
+  title: { type: String, required: true },
+  text: { type: String, required: true },
+  tags: { type: [String] }
 })
 
 schema.methods = {
-  view (full) {
+  view(full) {
     let view = {}
     let fields = ['title', 'text', 'tags']
     if (full) {

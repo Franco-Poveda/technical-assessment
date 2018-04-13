@@ -10,7 +10,7 @@ class Mongodb {
     }
 
     connect() {
-        let uri = config.get('mongodb').uri;
+        let uri = process.env.MONGODB_URI || config.get('mongodb').uri;
         const promise = new Promise(function _mongoExecutor(resolve, reject) {
             mongoose.connect(uri,
                 (err) => {
